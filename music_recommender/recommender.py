@@ -1,7 +1,4 @@
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
 import json
 import webbrowser
 import spotipy
@@ -21,16 +18,11 @@ user_name = spotifyObject.current_user()
 # to print response in usable format
 print(json.dumps(user_name, sort_keys=True, indent=4))
 
-df = pd.read_csv("C:\\Users\\dhruv\\Desktop\\FeelTunes\\music_recommender\\data\\data_moods.csv")
-
-df = df[['name', 'album', 'popularity', 'mood', 'id']]
-df['history'] = 0
-
-
 # Making song recommendations based on predicted class
 
 
 def recommend_songs(pred_class, df):
+    play = None
     if pred_class == 'Disgust':
         play = df[df['mood'] == 'Sad']
         play = play.sort_values(by=['popularity', 'history'], ascending=[False, True])
@@ -57,11 +49,15 @@ def recommend_songs(pred_class, df):
         #         play = play[:5].reset_index(drop=True)
         play = play.reset_index(drop=True)
     #         display(play)
-
+    print(type(play))
     return play
 
 
-def recommend(emotion):
+def recommend(emotion, path):
+    df = pd.read_csv(path)
+
+    df = df[['name', 'album', 'popularity', 'mood', 'id']]
+    df['history'] = 0
     detect_emotion = emotion  # get it from the model
     playlist = recommend_songs(detect_emotion, df)
     i = 0
@@ -106,3 +102,6 @@ def recommend(emotion):
         song = song_items[0]['external_urls']['spotify']
         webbrowser.open(song)
         print("\nSong has opened in the browser\n")
+
+
+# recommend("Surprise", "data/data_moods.csv")

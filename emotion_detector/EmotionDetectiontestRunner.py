@@ -5,17 +5,17 @@ import numpy as np
 
 # loading weights
 
-def detect_emote():
+def detect_emote(json_path, model_path, cascade_path):
     max_index = 3
-    emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+    emotion_dict = {0: "Angry", 1: "Disgust", 2: "Fear", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprise"}
 
-    json_file = open('C:\\Users\\dhruv\\Desktop\\FeelTunes\\face_detection\\model\\emoticon_model.json', 'r')
+    json_file = open(json_path, 'r')
     loaded_model_json = json_file.read()
     json_file.close()
 
     emotion_model = model_from_json(loaded_model_json)
 
-    emotion_model.load_weights("C:\\Users\\dhruv\\Desktop\\FeelTunes\\face_detection\\model\\emoticon_model.h5")
+    emotion_model.load_weights(model_path)
     print("loaded model from disc")
 
     # cap = cv2.VideoCapture("C:\\Users\\dhruv\\Desktop\\MusicRecommender\\face-detection\\sample-vid.mp4")
@@ -28,7 +28,7 @@ def detect_emote():
         if not ret:
             break
 
-        front_face_detector = cv2.CascadeClassifier('C:\\Users\\dhruv\\Desktop\\FeelTunes\\face_detection\\haarcascade\\haarcascade_frontalface_default.xml')
+        front_face_detector = cv2.CascadeClassifier(cascade_path)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         #     detect faces on the camera
@@ -55,4 +55,3 @@ def detect_emote():
     return emotion_dict[max_index]
 
 
-# print(detect_emote())
